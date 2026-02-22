@@ -56,4 +56,11 @@ public class BookService {
 
         return bookMapper.toDto(saved);
     }
+
+    public void deleteBookById(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No Book with Id " + id));
+
+        bookRepository.delete(book);
+    }
 }
