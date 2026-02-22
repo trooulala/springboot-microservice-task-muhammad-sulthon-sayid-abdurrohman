@@ -1,6 +1,7 @@
 package com.psm.book.management.controller;
 
-import com.psm.book.management.dto.BookInsertRequest;
+import com.psm.book.management.dto.BookTitleUpdateRequest;
+import com.psm.book.management.dto.BookUpsertRequest;
 import com.psm.book.management.dto.BookResponse;
 import com.psm.book.management.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping()
-    public ResponseEntity<BookResponse> addNewBook(@Valid @RequestBody BookInsertRequest dto) {
+    public ResponseEntity<BookResponse> addNewBook(@Valid @RequestBody BookUpsertRequest dto) {
         BookResponse response = bookService.addNewBook(dto);
 
         return ResponseEntity.ok(response);
@@ -33,6 +34,20 @@ public class BookController {
     @GetMapping("{id}")
     public ResponseEntity<BookResponse> findBookById(@PathVariable Long id) {
         BookResponse response = bookService.findBookById(id);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<BookResponse> updateBookById(@PathVariable Long id, @Valid @RequestBody BookUpsertRequest dto) {
+        BookResponse response = bookService.updateBookById(id, dto);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<BookResponse> updateBookTitleById(@PathVariable Long id, @Valid @RequestBody BookTitleUpdateRequest dto) {
+        BookResponse response = bookService.updateBookTitleById(id, dto);
 
         return ResponseEntity.ok(response);
     }

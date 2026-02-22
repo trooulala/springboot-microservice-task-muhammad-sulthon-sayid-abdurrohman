@@ -1,6 +1,7 @@
 package com.psm.book.management.service;
 
-import com.psm.book.management.dto.BookInsertRequest;
+import com.psm.book.management.dto.BookTitleUpdateRequest;
+import com.psm.book.management.dto.BookUpsertRequest;
 import com.psm.book.management.dto.BookResponse;
 import com.psm.book.management.entity.Book;
 import com.psm.book.management.mapper.BookMapper;
@@ -16,7 +17,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
 
-    public BookResponse addNewBook(BookInsertRequest dto) {
+    public BookResponse addNewBook(BookUpsertRequest dto) {
         Book book = bookMapper.toEntity(dto);
         var saved = bookRepository.save(book);
 
@@ -34,5 +35,25 @@ public class BookService {
                 .orElseThrow(() -> new RuntimeException("No Book with Id " + id));
 
         return bookMapper.toDto(book);
+    }
+
+    public BookResponse updateBookById(Long id, BookUpsertRequest dto) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No Book with Id " + id));
+
+        bookMapper.updateEntityFromDto(book, dto);
+        var saved = bookRepository.save(book);
+
+        return bookMapper.toDto(saved);
+    }
+
+    public BookResponse updateBookTitleById(Long id, BookTitleUpdateRequest dto) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No Book with Id " + id));
+
+        bookMapper.updateTitleFromDto(book, dto);
+        var saved = bookRepository.save(book);
+
+        return bookMapper.toDto(saved);
     }
 }
